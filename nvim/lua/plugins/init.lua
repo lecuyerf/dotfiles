@@ -366,5 +366,159 @@ return {
     config = function()
       require("diffview").setup()
     end
+  },
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*",
+    lazy = true,
+    ft = "markdown",
+    cmd = {
+      "ObsidianToday",
+      "ObsidianYesterday",
+      "ObsidianSearch",
+      "ObsidianNew",
+      "ObsidianTemplate",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {
+      workspaces = {
+        { name = "vault", path = "~/Obsidian/Vault" },
+      },
+      daily_notes = {
+        folder = "Journal",
+        template = "daily",
+      },
+      templates = {
+        folder = "Templates",
+        date_format = "%Y-%m-%d",
+        time_format = "%H:%M",
+        substitutions = {
+          day_name = function() return os.date("%A") end,
+          week = function() return os.date("Week %W — %Y") end,
+          month = function() return os.date("%B %Y") end,
+        },
+      },
+      new_notes_location = "current_dir",
+      ui = {
+        enable = false,
+      },
+    },
+    keys = {
+      { "<leader>od", "<cmd>ObsidianToday<cr>", desc = "Today's daily note" },
+      { "<leader>oy", "<cmd>ObsidianYesterday<cr>", desc = "Yesterday's daily note" },
+      { "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "Search vault" },
+      { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "New note" },
+      { "<leader>ot", function() vim.bo.modifiable = true; vim.cmd("ObsidianTemplate") end, desc = "Insert template" },
+      { "<leader>ol", "<cmd>ObsidianLinks<cr>", desc = "Show links" },
+      { "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "Show backlinks" },
+      {
+        "<leader>ow",
+        function()
+          local vault = vim.fn.expand("~/Obsidian/Vault")
+          local name = os.date("Week %W — %Y")
+          local path = vault .. "/Weekly/" .. name .. ".md"
+          vim.cmd("edit " .. vim.fn.fnameescape(path))
+          if vim.fn.filereadable(path) == 0 or vim.fn.getfsize(path) <= 0 then
+            vim.bo.modifiable = true
+            vim.cmd("ObsidianTemplate weekly")
+          end
+        end,
+        desc = "Weekly note",
+      },
+      {
+        "<leader>om",
+        function()
+          local vault = vim.fn.expand("~/Obsidian/Vault")
+          local name = os.date("%B %Y")
+          local path = vault .. "/Monthly/" .. name .. ".md"
+          vim.cmd("edit " .. vim.fn.fnameescape(path))
+          if vim.fn.filereadable(path) == 0 or vim.fn.getfsize(path) <= 0 then
+            vim.bo.modifiable = true
+            vim.cmd("ObsidianTemplate monthly")
+          end
+        end,
+        desc = "Monthly note",
+      },
+    },
+  },
+  {
+    "yetone/avante.nvim",
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    -- ⚠️ must add this setting! ! !
+    build = vim.fn.has("win32") ~= 0
+      and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+      or "make",
+    event = "VeryLazy",
+    version = false, -- Never set this value to "*"! Never!
+    ---@module 'avante'
+    ---@type avante.Config
+    opts = {
+      -- add any opts here
+      -- this file can contain specific instructions for your project
+      instructions_file = "avante.md",
+      provider = "claude-code",
+      acp_providers = {
+        ["claude-code"] = {
+          command = "npx",
+          args = { "-y", "-g", "@agentclientprotocol/claude-agent-acp" },
+          env = {
+            HOME = os.getenv("HOME"),
+            NODE_NO_WARNINGS = "1",
+            ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY"),
+            ANTHROPIC_BASE_URL = os.getenv("ANTHROPIC_BASE_URL"),
+            ACP_PATH_TO_CLAUDE_CODE_EXECUTABLE = vim.fn.exepath("claude") ~= "" and vim.fn.exepath("claude") or "/Users/f.lecuyer/.local/bin/claude",
+            ACP_PERMISSION_MODE = "bypassPermissions",
+          },
+        },
+      },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "nvim-mini/mini.pick", -- for file_selector provider mini.pick
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      "ibhagwan/fzf-lua", -- for file_selector provider fzf
+      "stevearc/dressing.nvim", -- for input provider dressing
+      "folke/snacks.nvim", -- for input provider snacks
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "zbirenbaum/copilot.lua", -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+  },
+  {
+    "sotte/presenting.nvim",
+    opts = {
+      -- fill in your options here
+      -- see :help Presenting.config
+    },
+    cmd = { "Presenting" },
   }
 }
