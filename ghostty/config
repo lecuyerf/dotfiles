@@ -11,7 +11,7 @@ cursor-style-blink = true
 cursor-color = #f5a97f
 cursor-text = #24273a
 # Stop shell integration / prompt from overriding the block cursor with a bar
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor,no-sudo,title,ssh-env,no-ssh-terminfo
 
 # Window (wezterm: window_decorations = RESIZE, NeverPrompt close)
 macos-titlebar-style = hidden
