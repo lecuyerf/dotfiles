@@ -1,0 +1,95 @@
+onboarding = false
+# herdr configuration — migrated from ~/.tmux.conf
+# Reload with: herdr server reload-config (or prefix+shift+R)
+#
+# Covered natively by herdr (no config needed):
+#   - vi-style copy mode (prefix+[, then v to select, y to copy)
+#   - clipboard integration (copy_on_select below)
+#   - session persistence across restarts (tmux-resurrect/continuum)
+#   - tab indexing from 1 and renumbering
+#   - true color
+
+# tmux: set -g prefix C-s
+[keys]
+prefix = "ctrl+s"
+
+# tmux: vim-tmux-navigator — pane navigation also available without prefix
+focus_pane_left = ["prefix+h", "ctrl+alt+h"]
+focus_pane_down = ["prefix+j", "ctrl+alt+j"]
+focus_pane_up = ["prefix+k", "ctrl+alt+k"]
+focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+
+# Custom popups from tmux.conf. Letters kept where free; alt added where the
+# key is taken by a herdr default (l=focus right, g=goto, o=notifications,
+# v=split).
+[[keys.command]]
+key = "prefix+alt+l"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "gerrit-dashboard"
+description = "gerrit dashboard"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+alt+o"
+type = "popup"
+command = "lazydocker"
+description = "lazydocker"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+i"
+type = "popup"
+command = "interrupt-dashboard"
+description = "interrupt dashboard"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+alt+v"
+type = "popup"
+command = "nvim ."
+description = "nvim in current dir"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+ctrl+o"
+type = "popup"
+command = "cd ~/Obsidian/Vault && nvim +ObsidianToday"
+description = "obsidian daily note"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = "zsh -l"
+description = "popup terminal"
+width = "90%"
+height = "90%"
+
+# tmux: catppuccin/tmux theme
+[theme]
+name = "catppuccin"
+
+[ui]
+# tmux: status-position top
+tab_bar_position = "top"
+# tmux: set-option -g mouse on
+mouse_capture = true
+# tmux: copy-pipe-and-cancel pbcopy
+copy_on_select = true
+
+# tmux: tmux-resurrect + tmux-continuum (@continuum-restore on)
+[session]
+resume_agents_on_restore = true
